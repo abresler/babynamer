@@ -1,6 +1,9 @@
 babynamer
 ================
 
+[![Travis build
+status](https://travis-ci.com/abresler/babynamer.svg?branch=master)](https://travis-ci.com/abresler/babynamer)
+
 Real-time access to all United States baby-name data.
 
 ### Install
@@ -45,5 +48,5 @@ us_baby_names(type = c("territory"))
 <!-- end list -->
 
 ``` r
-us_baby_names(type = c("national", "state","territory"))
+us_baby_names(type = c("national", "state", "territory"))
 ```

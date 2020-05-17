@@ -3,6 +3,9 @@ title: "babynamer"
 output: rmarkdown::github_document
 ---
 
+[![Travis build status](https://travis-ci.com/abresler/babynamer.svg?branch=master)](https://travis-ci.com/abresler/babynamer)
+
+
 Real-time access to all United States baby-name
 data.
 
