@@ -21,3 +21,7 @@
 ^tools$
 ^LICENSE\.md$
 ^cran-comments\.md$
+^_pkgdown\.yml$
+^pkgdown$
+^README\.Rmd$
+^readme.md

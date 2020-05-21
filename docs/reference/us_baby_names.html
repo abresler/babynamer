@@ -73,7 +73,7 @@ various baby names in the United States." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">babynamer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.91</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.92</span>
       </span>
     </div>
 
@@ -87,6 +87,9 @@ various baby names in the United States." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -140,19 +143,22 @@ various baby names in the United States.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a `tibble` or a nested `tibble` if type length exceeds 1</p>
+    <p>a `tibble` or a nested `tibble` if `type` length exceeds 1</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Includes access to national, state, and territorial
 data.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>babynamer</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>babynamer</span>)
 
 <span class='no'>tbl_usa</span> <span class='kw'>&lt;-</span> <span class='fu'>us_baby_names</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"national"</span>)
 <span class='no'>tbl_state</span> <span class='kw'>&lt;-</span> <span class='fu'>us_baby_names</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"state"</span>)
 <span class='no'>tbl_territory</span> <span class='kw'>&lt;-</span> <span class='fu'>us_baby_names</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"territory"</span>)
-<span class='no'>us_baby_names</span> <span class='kw'>&lt;-</span> <span class='fu'>us_baby_names</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"national"</span>,<span class='st'>"state"</span>, <span class='st'>"territory"</span>))</pre>
+<span class='no'>us_baby_names</span> <span class='kw'>&lt;-</span> <span class='fu'>us_baby_names</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"national"</span>,<span class='st'>"state"</span>, <span class='st'>"territory"</span>))
+
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

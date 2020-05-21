@@ -312,22 +312,6 @@
   })
 
 
-.ss_urls <-
-  memoise(function() {
-    page <- read_html("https://www.ssa.gov/oact/babynames/limits.html")
-    zips <- html_nodes(page, ".m-w-75 li a") %>% html_attr("href")
-    urls <- str_c("https://www.ssa.gov/oact/babynames/", zips)
-
-    tibble(url_zip = urls) %>%
-      mutate(
-        type = case_when(
-          url_zip %>% str_detect("names.zip") ~ "national",
-          url_zip %>% str_detect("namesbystate") ~ "state",
-          TRUE ~ "territory"
-        )
-      ) %>%
-      select(type, url_zip)
-  })
 
 .babynames <-
   function(type = "national",
@@ -339,11 +323,34 @@
       stop("Type can only be national, state or territory")
     }
 
+    .ss_urls <-
+      memoise(function() {
+        page <- read_html("https://www.ssa.gov/oact/babynames/limits.html")
+        zips <- html_nodes(page, ".m-w-75 li a") %>% html_attr("href")
+        url_zip <- str_c("https://www.ssa.gov/oact/babynames/", zips)
+
+        data <-
+          tibble(url_zip) %>%
+          mutate(
+            type = case_when(
+              url_zip %>% str_detect("names.zip") ~ "national",
+              url_zip %>% str_detect("namesbystate") ~ "state",
+              TRUE ~ "territory"
+            )
+          ) %>%
+          select(type, url_zip)
+
+        data
+      })
+
+
     df_urls <- .ss_urls()
 
     url <-
-      df_urls %>% filter(type == type_slug) %>%
-      pull(url_zip)
+      df_urls %>%
+      filter(type == type_slug) %>%
+      select(one_of("url_zip")) %>%
+      pull()
 
 
     if (type_slug == "national") {
@@ -390,11 +397,11 @@
 #' \item `territory` -  Popularity by territory, sex and year
 #' }
 #' @param include_features if `TRUE` includes features about the popularity of the name by sex
-#'
-#' @return a `tibble` or a nested `tibble` if type length exceeds 1
+#' @return a `tibble` or a nested `tibble` if `type` length exceeds 1
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library(babynamer)
 #'
 #' tbl_usa <- us_baby_names(type = "national")
@@ -402,6 +409,7 @@
 #' tbl_territory <- us_baby_names(type = "territory")
 #' us_baby_names <- us_baby_names(type = c("national","state", "territory"))
 #'
+#'}
 us_baby_names <-
   function(type = "national",
            include_features = T) {
@@ -410,12 +418,10 @@ us_baby_names <-
     }
 
     if (length(type) > 1) {
-      "More than 1 file type - nesting data and assigning to environment" %>% message()
-      assign_to_environment <- T
+      "More than 1 file type nesting data - you may also want to think about assigning to environment." %>% message()
       nest_data <- T
     } else {
       nest_data <- F
-      assign_to_environment <- F
     }
 
     .babynames_safe <- possibly(.babynames, tibble())
@@ -426,26 +432,6 @@ us_baby_names <-
                         include_features = include_features,
                         nest_data = nest_data)
       })
-
-    if (assign_to_environment && nest_data) {
-      data$type %>%
-        walk(function(x) {
-          data <-
-            data %>% filter(type == x) %>%
-            unnest(cols = c(data))
-
-          tbl_name <- glue("tbl_{x}_names") %>% as.character()
-
-          glue("Assigning {x} data to {tbl_name} in global environment") %>% message()
-
-          assign(x = tbl_name,
-                 value = data,
-                 envir = .GlobalEnv)
-
-          return(invisible())
-
-        })
-    }
 
     data
   }

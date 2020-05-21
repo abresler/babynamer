@@ -16,7 +16,7 @@ us_baby_names(type = "national", include_features = T)
 \item{include_features}{if `TRUE` includes features about the popularity of the name by sex}
 }
 \value{
-a `tibble` or a nested `tibble` if type length exceeds 1
+a `tibble` or a nested `tibble` if `type` length exceeds 1
 }
 \description{
 Returns detailed data about the popularity of
@@ -27,6 +27,7 @@ Includes access to national, state, and territorial
 data.
 }
 \examples{
+\dontrun{
 library(babynamer)
 
 tbl_usa <- us_baby_names(type = "national")
@@ -34,4 +35,5 @@ tbl_state <- us_baby_names(type = "state")
 tbl_territory <- us_baby_names(type = "territory")
 us_baby_names <- us_baby_names(type = c("national","state", "territory"))
 
+}
 }
