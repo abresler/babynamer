@@ -20,4 +20,4 @@ Depends:
 Imports: dplyr, curl, glue, lubridate, memoise, purrr, readr, rvest, stringr, tibble, tidyr, xml2
 Suggests: testthat
 Language: en-US
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
