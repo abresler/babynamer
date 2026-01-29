@@ -1,9 +1,35 @@
+# Download helper with browser-like headers to bypass Akamai blocking
+.download_ssa_file <- function(url, destfile) {
+  resp <- request(url) |>
+    req_headers(
+      "User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+      "Accept-Language" = "en-US,en;q=0.9",
+      "Accept-Encoding" = "gzip, deflate, br",
+      "Connection" = "keep-alive",
+      "Upgrade-Insecure-Requests" = "1",
+      "Sec-Fetch-Dest" = "document",
+      "Sec-Fetch-Mode" = "navigate",
+      "Sec-Fetch-Site" = "none",
+      "Sec-Fetch-User" = "?1",
+      "Cache-Control" = "max-age=0"
+    ) |>
+    req_perform()
+
+  if (resp_status(resp) != 200) {
+    stop(glue("Download failed with status {resp_status(resp)}"))
+  }
+
+  writeBin(resp_body_raw(resp), destfile)
+  invisible(destfile)
+}
+
 .national <-
   memoise(function(url = "https://www.ssa.gov/oact/babynames/names.zip",
                             include_features = T) {
     outfile <- tempfile("download", fileext = ".zip")
 
-    file <- curl_download(url, outfile)
+    file <- .download_ssa_file(url, outfile)
     unz_files <- unzip(file, exdir = "xml")
     unz_files <- unz_files %>% str_to_lower()
     glue("US National SS names has {length(unz_files)} files") %>% message()
@@ -100,7 +126,7 @@
                             include_features = T) {
     outfile <- tempfile("download", fileext = ".zip")
 
-    file <- curl_download(url, outfile)
+    file <- .download_ssa_file(url, outfile)
     unz_files <- unzip(file, exdir = "xml")
     glue("State SS names has {length(unz_files)} files") %>% message()
     unz_files <- unz_files %>% str_to_lower()
@@ -208,7 +234,7 @@
                             include_features = T) {
     outfile <- tempfile("download", fileext = ".zip")
 
-    file <- curl_download(url, outfile)
+    file <- .download_ssa_file(url, outfile)
     unz_files <- unzip(file, exdir = "xml")
     glue("Territory SS names {length(unz_files)} files") %>% message()
     unz_files <- unz_files %>% str_to_lower()
@@ -323,34 +349,13 @@
       stop("Type can only be national, state or territory")
     }
 
-    .ss_urls <-
-      memoise(function() {
-        page <- read_html("https://www.ssa.gov/oact/babynames/limits.html")
-        zips <- html_nodes(page, ".m-w-75 li a") %>% html_attr("href")
-        url_zip <- str_c("https://www.ssa.gov/oact/babynames/", zips)
-
-        data <-
-          tibble(url_zip) %>%
-          mutate(
-            type = case_when(
-              url_zip %>% str_detect("names.zip") ~ "national",
-              url_zip %>% str_detect("namesbystate") ~ "state",
-              TRUE ~ "territory"
-            )
-          ) %>%
-          select(type, url_zip)
-
-        data
-      })
-
-
-    df_urls <- .ss_urls()
-
-    url <-
-      df_urls %>%
-      filter(type == type_slug) %>%
-      select(one_of("url_zip")) %>%
-      pull()
+    # Hardcoded URLs - SSA URLs are stable and scraping the limits page is blocked
+    url <- switch(
+      type_slug,
+      "national" = "https://www.ssa.gov/oact/babynames/names.zip",
+      "state" = "https://www.ssa.gov/oact/babynames/state/namesbystate.zip",
+      "territory" = "https://www.ssa.gov/oact/babynames/territory/namesbyterritory.zip"
+    )
 
 
     if (type_slug == "national") {

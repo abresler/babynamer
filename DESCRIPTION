@@ -17,7 +17,7 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     R (>= 3.5.0)
-Imports: dplyr, curl, glue, lubridate, memoise, purrr, readr, rvest, stringr, tibble, tidyr, xml2
+Imports: dplyr, curl, glue, httr2, lubridate, memoise, purrr, readr, rvest, stringr, tibble, tidyr, xml2
 Suggests: testthat
 Language: en-US
 RoxygenNote: 7.3.3

@@ -10,6 +10,7 @@
 ## usethis namespace: end
 #' @import dplyr
 #' @importFrom curl curl_download
+#' @importFrom httr2 request req_headers req_perform resp_status resp_body_raw
 #' @importFrom lubridate ymd
 #' @importFrom glue glue
 #' @importFrom memoise memoise
