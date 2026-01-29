@@ -2,9 +2,12 @@
 #'
 #' Tools to access baby name data
 #'
-#' @name babynamer
-#' @docType package
 #' @author Alex Bresler (abresler@@asbcllc.com)
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
+## usethis namespace: end
 #' @import dplyr
 #' @importFrom curl curl_download
 #' @importFrom lubridate ymd

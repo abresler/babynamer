@@ -25,3 +25,7 @@
 ^pkgdown$
 ^README\.Rmd$
 ^readme.md
+^CLAUDE\.md$
+^CLEANUP_MANIFEST\.json$
+^\.cleanup_scan\.R$
+^\.DS_Store$
