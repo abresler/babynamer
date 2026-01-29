@@ -36,6 +36,22 @@ All sourced from SSA zip files:
 - `state`: `ssa.gov/oact/babynames/state/namesbystate.zip`
 - `territory`: `ssa.gov/oact/babynames/territory/namesbyterritory.zip`
 
+### Download Mechanism (CRITICAL)
+
+SSA uses Akamai CDN which blocks programmatic requests. The package uses `httr2` with browser-like headers to bypass this:
+
+```r
+.download_ssa_file() # Helper with Sec-Fetch-* headers
+```
+
+**Required headers for SSA downloads:**
+- `Sec-Fetch-Dest: document`
+- `Sec-Fetch-Mode: navigate`
+- `Sec-Fetch-Site: none`
+- `Sec-Fetch-User: ?1`
+
+If downloads break in the future, check if SSA has changed their CDN protection.
+
 ### Memoization
 
 Internal functions (`.national`, `.state`, `.territory`) are wrapped with `memoise()` to cache expensive downloads within an R session. Cache clears when session ends.
